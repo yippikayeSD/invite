@@ -6,34 +6,117 @@
     
     <!-- WhatsApp / Social Media Preview Tags -->
     <title>You're Invited!</title>
-    <meta name="description" content="Click to view the invitation and location.">
-    
-    <!-- WhatsApp strictly requires a REAL file URL, not base64 -->
+    <meta name="description" content="Tap to view the invitation and location.">
     <meta property="og:title" content="You're Invited!">
     <meta property="og:description" content="Tap to open the location in Google Maps.">
+    <!-- Using a relative path is fine as long as invite.jpg is in the same folder as index.html -->
     <meta property="og:image" content="invite.jpg"> 
     <meta property="og:image:type" content="image/jpeg">
-    <meta property="og:image:width" content="800">
-    <meta property="og:image:height" content="800">
     <meta property="og:type" content="website">
 
-    <!-- Instant Redirect -->
-    <meta http-equiv="refresh" content="0;url=https://maps.app.goo.gl/wNSLsVtd71o2HQq17">
+    <!-- 5-Second Redirect Delay -->
+    <meta http-equiv="refresh" content="5;url=https://maps.app.goo.gl/wNSLsVtd71o2HQq17">
 
     <style>
-        body { font-family: sans-serif; text-align: center; padding: 50px; background: #f9f9f9; }
-        .loader { border: 4px solid #f3f3f3; border-top: 4px solid #3498db; border-radius: 50%; width: 30px; height: 30px; animation: spin 2s linear infinite; margin: 20px auto; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        a { color: #3498db; text-decoration: none; font-weight: bold; }
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #f0f2f5;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            text-align: center;
+        }
+        .container {
+            max-width: 90%;
+            width: 450px;
+            padding: 20px;
+        }
+        .invite-image {
+            width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .invite-image:active {
+            transform: scale(0.98);
+        }
+        .status-box {
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .timer-text {
+            color: #65676b;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #1877f2;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        /* Progress bar animation */
+        .progress-container {
+            width: 100%;
+            height: 4px;
+            background-color: #e4e6eb;
+            border-radius: 2px;
+            margin-top: 15px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            background-color: #1877f2;
+            animation: progress 5s linear forwards;
+        }
+        @keyframes progress {
+            from { width: 0%; }
+            to { width: 100%; }
+        }
     </style>
 </head>
 <body>
-    <div class="loader"></div>
-    <p>Opening location in Maps...</p>
-    <p>If not redirected, <a href="https://maps.app.goo.gl/wNSLsVtd71o2HQq17">click here</a>.</p>
 
-    <script>
-        window.location.replace("https://maps.app.goo.gl/wNSLsVtd71o2HQq17");
-    </script>
+<div class="container">
+    <a href="https://maps.app.goo.gl/wNSLsVtd71o2HQq17">
+        <img src="invite.jpg" class="invite-image" alt="Invitation Card">
+    </a>
+
+    <div class="status-box">
+        <p class="timer-text">Opening location in <span id="countdown">5</span> seconds...</p>
+        <a href="https://maps.app.goo.gl/wNSLsVtd71o2HQq17" class="btn">Open Maps Now</a>
+        <div class="progress-container">
+            <div class="progress-bar"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let seconds = 5;
+    const countdownEl = document.getElementById('countdown');
+    
+    const timer = setInterval(() => {
+        seconds--;
+        countdownEl.textContent = seconds;
+        if (seconds <= 0) {
+            clearInterval(timer);
+            window.location.replace("https://maps.app.goo.gl/wNSLsVtd71o2HQq17");
+        }
+    }, 1000);
+</script>
+
 </body>
 </html>
